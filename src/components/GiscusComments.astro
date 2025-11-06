@@ -1,0 +1,120 @@
+---
+// Giscus는 GitHub Discussions를 이용한 댓글 시스템입니다.
+// ⚠️ 주의: 이 컴포넌트를 레이아웃에 추가할 때, 반드시 `client:visible` 디렉티브를 사용하세요.
+// 예: <GiscusComments {...props} client:visible />
+
+export interface Props {
+    // ⚠️ 필수 설정: 자신의 GitHub 저장소와 Discussions 카테고리 정보로 변경해야 합니다.
+    repo: string; // "사용자명/저장소명" (예: "your-username/your-blog-repo")
+    repoId: string; // GitHub 앱 설치 후 발급받는 ID
+    category: string; // Discussions 카테고리 이름 (예: "General")
+    categoryId: string; // Discussions 카테고리 ID
+    
+    // 선택적 설정
+    mapping?: 'pathname' | 'url' | 'title' | 'og:title' | 'specific';
+    theme?: 'light' | 'dark' | 'preferred_color_scheme' | 'custom';
+    lang?: string; // 언어 설정 (예: 'ko', 'en')
+    reactionsEnabled?: boolean;
+    emitMetadata?: boolean;
+    inputPosition?: 'top' | 'bottom';
+    
+}
+
+const {
+    repo = "iftype/iftype.github.io",
+    repoId= "R_kgDOQPLEYA",
+    category ="Announcements",
+    categoryId = "DIC_kwDOQPLEYM4CxfsK",
+    mapping = 'pathname', 
+    theme = 'preferred_color_scheme', 
+    lang = 'ko', 
+    reactionsEnabled = false,
+    emitMetadata = false,
+    inputPosition = 'bottom'
+} = Astro.props;
+
+// Giscus 설정 검증
+if (!repo || !repoId || !category || !categoryId) {
+    console.error("GiscusComments: 필수 설정(repo, repoId, category, categoryId)이 누락되었습니다. SETUP_GUIDE.md를 확인해주세요.");
+}
+---
+
+<div class="giscus-comments-container my-12 pt-8 border-t border-gray-200 dark:border-gray-700">
+    <!-- Giscus 위젯이 로드될 컨테이너 -->
+    <div id="giscus-container"></div>
+</div>
+
+<script define:vars={{ 
+    repo, 
+    repoId, 
+    category, 
+    categoryId, 
+    mapping, 
+    theme, 
+    lang, 
+    reactionsEnabled,
+    emitMetadata,
+    inputPosition
+}}>
+    // 이 스크립트는 컴포넌트가 뷰포트에 나타났을 때만 실행됩니다 (client:visible 사용 시).
+    function loadGiscus() {
+        if (!document.getElementById('giscus-container')) return;
+        if (document.getElementById('giscus-container').children.length > 0) return;
+
+        const script = document.createElement('script');
+        
+        script.src = 'https://giscus.app/client.js';
+        script.setAttribute('data-repo', repo);
+        script.setAttribute('data-repo-id', repoId);
+        script.setAttribute('data-category', category);
+        script.setAttribute('data-category-id', categoryId);
+        script.setAttribute('data-mapping', mapping);
+        script.setAttribute('data-strict', '0');
+        script.setAttribute('data-reactions-enabled', reactionsEnabled ? '1' : '0');
+        script.setAttribute('data-emit-metadata', emitMetadata ? '1' : '0');
+        script.setAttribute('data-input-position', inputPosition);
+        script.setAttribute('data-theme', theme);
+        script.setAttribute('data-lang', lang);
+        script.setAttribute('crossorigin', 'anonymous');
+        script.async = true;
+
+        document.getElementById('giscus-container').appendChild(script);
+
+        // Astro에서 테마 변경을 감지하고 Giscus에 메시지를 보내는 로직
+        // 'preferred_color_scheme'를 사용하는 경우에만 필요
+        if (theme === 'preferred_color_scheme' || theme === 'custom') {
+             // 테마 변경을 감지하기 위한 Mutation Observer
+            const observer = new MutationObserver((mutations) => {
+                mutations.forEach((mutation) => {
+                    if (
+                        mutation.attributeName === 'class' && 
+                        mutation.target === document.documentElement
+                    ) {
+                        const newTheme = document.documentElement.classList.contains('dark') ? 'dark' : 'light';
+                        const iframe = document.querySelector('iframe.giscus-frame');
+                        if (iframe) {
+                            iframe.contentWindow.postMessage(
+                                { giscus: { setConfig: { theme: newTheme } } },
+                                'https://giscus.app'
+                            );
+                        }
+                    }
+                });
+            });
+            
+            observer.observe(document.documentElement, { attributes: true });
+        }
+    }
+
+    // Astro의 client:visible 디렉티브에 의해 컴포넌트가 로드될 때 loadGiscus 함수가 실행됨.
+    loadGiscus();
+</script>
+
+<style>
+    .giscus-comments-container {
+        /* Giscus 위젯의 반응형 레이아웃을 위한 설정 */
+        max-width: 800px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+</style>
