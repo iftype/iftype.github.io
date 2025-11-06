@@ -3,7 +3,7 @@ import "@fontsource/roboto/400.css";
 import "@fontsource/roboto/500.css";
 import "@fontsource/roboto/700.css";
 
-imporimport ConfigCarrier from "@components/ConfigCarrier.astro";
+import ConfigCarrier from "@components/ConfigCarrier.astro";
 import { profileConfig, siteConfig } from "@/config";
 import {
 	AUTO_MODE,
@@ -76,14 +76,15 @@ const bannerOffset =
 <html lang={siteLang} class="bg-[var(--page-bg)] transition text-[14px] md:text-[16px]"
 	  data-overlayscrollbars-initialize
 >
-	<he>
+	<head>
 
 		<title>{pageTitle}</title>
 
 		<meta charset="UTF-8" />
 		<meta name="description" content={description || pageTitle}>
 		<meta name="author" content={profileConfig.name}>
-		<meta name="google-site-verification" content="Z5wQvHAl2nX-jjTzTdZc1CKHdBY5jD30AXwG4QsBgco" />
+        <meta name="google-site-verification" content="8n-ND-TJmCwIXM5ty0dRDNoBsqeowsjDaAiqLDrGBMU" />
+
 
 		<meta property="og:site_name" content={siteConfig.title}>
 		<meta property="og:url" content={Astro.url}>
@@ -93,9 +94,7 @@ const bannerOffset =
         <meta property="og:type" content="article" />
         ) : (
         <meta property="og:type" content="website" />
-               <meta property="og:type" content="website" />
         )}
- )}
 
 		<meta name="twitter:card" content="summary_large_image">
 		<meta property="twitter:url" content={Astro.url}>
@@ -159,6 +158,14 @@ const bannerOffset =
 
 		<!-- increase the page height during page transition to prevent the scrolling animation from jumping -->
 		<div id="page-height-extend" class="hidden h-[300vh]"></div>
+	</body>
+</html>
+
+<style is:global define:vars={{
+	bannerOffset,
+	'banner-height-home': `${BANNER_HEIGHT_HOME}vh`,
+	'banner-height': `${BANNER_HEIGHT}vh`,
+}}>
 @tailwind components;
 @layer components {
 	.enable-banner.is-home #banner-wrapper {
