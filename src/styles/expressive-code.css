@@ -1,9 +1,26 @@
-.expressive-code {
-    .frame {
-        @apply !shadow-none;
-    }
+/* .css 파일 */
 
-    .title {
-        font-family: "JetBrains Mono Variable", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+.expressive-code .frame {
+    box-shadow: none !important; 
+}
+
+.expressive-code .title {
+    font-family: "JetBrains Mono Variable", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+}
+@media (hover: none) {
+    /* hover가 불가능한 기기 (터치 기반, 주로 모바일) */
+    .expressive-code .frame:not(.has-title):not(.is-terminal) [data-language]::before {
+        display: none !important; /* 배지를 완전히 숨깁니다 */
     }
 }
+
+.expressive-code pre.wrap .ec-line .code {
+    /* 줄 바꿈을 명시적으로 비활성화합니다. */
+    white-space: pre !important; 
+    /* 가로 스크롤을 활성화합니다. */
+ 
+}   
+
+.expressive-code pre.wrap {
+    overflow-x: auto !important;
+}   
