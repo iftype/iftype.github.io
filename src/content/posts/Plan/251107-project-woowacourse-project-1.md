@@ -4,7 +4,7 @@ published: 2025-11-07
 description: '해야만 할 것들'
 image: ''
 tags: [plan]
-category: 'Plan'
+category: 'plan'
 draft: false 
 lang: 'ko'
 ---
