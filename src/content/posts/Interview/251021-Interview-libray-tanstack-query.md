@@ -3,7 +3,7 @@ title: tanstack-query에서 stale time과 gc time의 차이점에 대해서 설�
 published: 2025-10-21
 description: '매일메일의 질문 모아보기'
 image: ''
-tags: [tanstack-query,면접]
+tags: [interview-react,매일메일]
 category: '면접 대비 질문'
 draft: false 
 lang: 'ko'

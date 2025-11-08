@@ -3,7 +3,7 @@ title: 리액트의 props와 state에 대해서 설명해주세요.
 published: 2025-10-23
 description: '매일메일의 질문 모아보기'
 image: ''
-tags: [REACT,면접]
+tags: [interview-react,매일메일]
 category: '면접 대비 질문'
 draft: false 
 lang: 'ko'
