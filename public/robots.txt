@@ -1,4 +1,0 @@
-User-agent: *
-Allow: /
-
-Sitemap: https://iftype.github.io/sitemap-index.xml
